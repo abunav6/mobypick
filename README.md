@@ -1,1 +1,1 @@
-# book-recommendation
+# MobyPick
