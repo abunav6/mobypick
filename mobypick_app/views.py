@@ -10,3 +10,7 @@ def select_books(request):
 #def cognito_login(request):
 #    uri = "https%3A%2F%2Flocalhost%3A8000"
 #    return redirect(f"https://mobypick.auth.us-east-1.amazoncognito.com/login?client_id={client_id}&response_type=code&scope=email+openid+phone&redirect_uri={uri}")
+
+
+def bookgame(request):
+    return render(request, 'bookgame.html')
