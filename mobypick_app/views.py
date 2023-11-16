@@ -7,7 +7,8 @@ def landing_page(request):
 def select_books(request):
 
     # items to be collected from databse, prepopulating with random values for now
-    items = [{'image':'', 'author': '','name':''}]
+    items = [{'image':'https://m.media-amazon.com/images/I/511x4eT16mL._SY466_.jpg', 'author': 'Shakespeare','name':'OTHELLO'},
+             {'image':'https://images-worker.bonanzastatic.com/afu/images/069e/8d8f/be88_6591207841/51vvyfgws_2bl._sl1500_.jpg', 'author': 'Herman Melville','name':'MOBY DICK'}]
     return render(request, 'select_books.html', {'items': items})
 
 #def cognito_login(request):

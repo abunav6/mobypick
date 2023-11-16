@@ -1,9 +1,63 @@
-<!-- mobypick_app/templates/landing_page.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MobyPick - A Book Recommendation Engine</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-image: url('https://s3u.tmimgcdn.com/800x0/u28018890/e0fa40dbf6a2d2fe4ac3d2a48e4b268c.jpg'); /* Replace with your background image URL or path */
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      font-family: 'Arial', sans-serif; 
+      color: #ffffff;
+    }
 
-{% extends "base/base.html" %}
+    .content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
 
-{% block content %}
-</br>
-<a href="{% url 'select_books' %}"><button>Select Books</button></a>
-{% endblock%}
+    .content h1 {
+      font-size: 3em;
+      margin-bottom: 20px;
+    }
 
+    .content p {
+      font-size: 1.2em;
+      margin-bottom: 40px;
+    }
+
+    .cta-button {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 1.2em;
+      text-decoration: none;
+      background-color: #3498db; /* Set your preferred button color */
+      color: #ffffff; /* Set your preferred button text color */
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .cta-button:hover {
+      background-color: #2980b9; /* Set your preferred button hover color */
+    }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <h1>MobyPick - A Book Recommendation Engine</h1>
+    <p>Your page description goes here. Customize this text as needed.</p>
+    <a href="{% url 'select_books' %}" class="cta-button">Sign up</a>
+    <a href="{% url 'select_books' %}" class="cta-button">Log in</a>
+    <a href="{% url 'select_books' %}" class="cta-button">Select Books</a>
+  </div>
+</body>
+</html>
