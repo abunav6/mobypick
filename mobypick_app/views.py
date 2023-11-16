@@ -5,7 +5,10 @@ def landing_page(request):
     return render(request, 'landing_page.html')
 
 def select_books(request):
-    return render(request, 'select_books.html')
+
+    # items to be collected from databse, prepopulating with random values for now
+    items = [{'image':'', 'author': '','name':''}]
+    return render(request, 'select_books.html', {'items': items})
 
 #def cognito_login(request):
 #    uri = "https%3A%2F%2Flocalhost%3A8000"
