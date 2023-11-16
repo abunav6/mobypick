@@ -16,10 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from mobypick_app.views import landing_page, cognito_login
+from mobypick_app.views import landing_page, cognito_login, bookgame
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', landing_page, name='landing_page'),
     path('cognito_login/', cognito_login, name='cognito_login'),
+    path('bookgame/', bookgame, name='bookgame'),
 ]
