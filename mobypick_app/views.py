@@ -13,6 +13,7 @@ def landing_page(request):
 def select_books(request):
     # TODO: from the below 10 genres, get 10 books each, prompt user to select at most 10 books that appeals to them the most among these 100
     genre_choices = ['fiction', 'mystery_thriller_crime', 'romance', 'non_fiction', 'history_biography', 'fantasy_paranormal', 'children', 'young_adult', 'comics_graphic', 'poetry']
+    
 
 
     items = [{'image':'https://m.media-amazon.com/images/I/511x4eT16mL._SY466_.jpg', 'author': 'Shakespeare','name':'OTHELLO'},
