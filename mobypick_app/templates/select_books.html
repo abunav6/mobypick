@@ -5,38 +5,44 @@
 {% block content %}
 </br>
 
-<div class="container">
+<!-- Add this where you want the tabs to appear -->
+<ul class="nav nav-tabs" id="genreTabs">
+    {% for genre in genre_choices %}
+    <li class="nav-item">
+    <a class="nav-link" id="tab-{{ genre }}" data-toggle="tab" href="#tab-content">{{genre}}</a>
+  </li>
+  {% endfor %}
+</ul>
+
+<!-- Add this where you want the tab content to appear -->
+<div class="tab-content">
+  <div class="tab-pane fade show active" id="tab-content">
     <div class="row">
-        
-        {%for book in items%}
-            <div class="col-2">
-                <img src="{{ book.image }}" alt="Image" class="img-fluid">
-                <p>{{ book.name }}</p>
-                <p>{{ book.author }}</p>
-            </div>
-        {% endfor %}
-
+      {% for book in items %}
         <div class="col-2">
-            <img src="https://images-worker.bonanzastatic.com/afu/images/069e/8d8f/be88_6591207841/51vvyfgws_2bl._sl1500_.jpg" alt="Image" class="img-fluid">
-            <p>First line of text</p>
-            <p>Second line of text</p>
-         </div>
-
-        <div class="col-2">
-            <img src="https://images-worker.bonanzastatic.com/afu/images/069e/8d8f/be88_6591207841/51vvyfgws_2bl._sl1500_.jpg" alt="Image" class="img-fluid">
-            <p>First line of text</p>
-            <p>Second line of text</p>
+          <img src="{{ book.poster }}" alt="Image" class="img-fluid">
+          <p>{{ book.title }}</p>
+          <p>{{ book.author }}</p>
         </div>
-
-         <div class="col-2">
-            <img src="https://images-worker.bonanzastatic.com/afu/images/069e/8d8f/be88_6591207841/51vvyfgws_2bl._sl1500_.jpg" alt="Image" class="img-fluid">
-            <p>First line of text</p>
-            <p>Second line of text</p>
-        </div>
+      {% endfor %}
     </div>
-
+  </div>
 </div>
-<a href="{% url 'landing_page' %}"><button>Back to landing page</button></a>
+
+<!-- Add this script at the end of your HTML template to enable Bootstrap tabs -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UoV6eT/3HqJ9zzdYPbQU3oHW3I5om/lJ7uS1s7n4C7R2v5Fd8p5Cpy8FZf5A7l6" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<script>
+  // Add this script to handle tab switching
+  $(document).ready(function() {
+    $('#genreTabs a').on('click', function(e) {
+      e.preventDefault();
+      $(this).tab('show');
+    });
+  });
+</script>
 
 
 {% endblock%}
