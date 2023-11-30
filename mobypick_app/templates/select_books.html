@@ -7,27 +7,32 @@
 
 <!-- Add this where you want the tabs to appear -->
 <ul class="nav nav-tabs" id="genreTabs">
-    {% for genre in genre_choices %}
+    {% for genre, books in items.items %}
     <li class="nav-item">
-    <a class="nav-link" id="tab-{{ genre }}" data-toggle="tab" href="#tab-content">{{genre}}</a>
+    <a class="nav-link {% if forloop.first %}active{% endif %}" id="tab-{{ genre }}" data-toggle="tab" href="#tab-{{genre}}-content">{{genre}}</a>
   </li>
   {% endfor %}
 </ul>
 
 <!-- Add this where you want the tab content to appear -->
+
+
 <div class="tab-content">
-  <div class="tab-pane fade show active" id="tab-content">
+  {% for genre, books in items.items %}
+  <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="tab-{{genre}}-content">
     <div class="row">
-      {% for book in items %}
+      {% for book in books %}
         <div class="col-2">
-          <img src="{{ book.poster }}" alt="Image" class="img-fluid">
+          <img src="{{ book.image_url }}" alt="Image" class="img-fluid">
           <p>{{ book.title }}</p>
           <p>{{ book.author }}</p>
         </div>
       {% endfor %}
     </div>
   </div>
+  {% endfor %}
 </div>
+
 
 <!-- Add this script at the end of your HTML template to enable Bootstrap tabs -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -39,7 +44,10 @@
   $(document).ready(function() {
     $('#genreTabs a').on('click', function(e) {
       e.preventDefault();
-      $(this).tab('show');
+      let target = $(this).attr('href');
+      console.log(target);
+      $('.tab-pane').removeClass('show active');
+      $(target).addClass('show active');
     });
   });
 </script>
