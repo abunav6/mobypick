@@ -42,7 +42,7 @@ def select_books(request):
     
     import json
     items = json.load(open("top10.json", "r"))
-    return render(request, 'select_books.html', {'items':items, 'genre_choices': ["/".join([a.capitalize() for a in k.split("_")]) for k in genre_choices]})
+    return render(request, 'select_books.html', {'items':items})
 
 def cognito_login(request):
     # uri = "https%3A%2F%2Fmobypick.us-east-1.elasticbeanstalk.com%2Fselect_books"

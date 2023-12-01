@@ -13,7 +13,6 @@
   </li>
   {% endfor %}
 </ul>
-
 <!-- Add this where you want the tab content to appear -->
 
 
@@ -22,7 +21,7 @@
   <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="tab-{{genre}}-content">
     <div class="row">
       {% for book in books %}
-        <div class="col-2" id="{{genre}}-{{forloop.counter}}">
+        <div class="col-2" ondblclick="window.open('{{book.url}}', '_blank')">
           <img src="{{ book.image_url }}" alt="Image" class="img-fluid">
           <p>{{ book.title }}</p>
           <p>{{ book.author }}</p>
@@ -31,6 +30,7 @@
     </div>
   </div>
   {% endfor %}
+  
 </div>
 
 
@@ -42,6 +42,7 @@
 <script>
   // Add this script to handle tab switching
   $(document).ready(function() {
+  
     $('#genreTabs a').on('click', function(e) {
       e.preventDefault();
       let target = $(this).attr('href');
@@ -51,25 +52,27 @@
     });
   });
 
-  var clickCount = 0;
-  var clickTimeout;
-  var bookDivs = document.querySelectorAll('.col-2');
-  bookDivs.forEach(function(bookDiv){
-    bookDiv.onclick = event => {
-      clickCount++;
-   if (clickCount === 1) {
-      clickTimeout = setTimeout(function() {
-          clickCount = 0;
-          console.log('Single click event triggered');
-          // Add your single-click logic here
-      }, 250);   
-    }else if (clickCount === 2) {
-        clearTimeout(clickTimeout);
-        clickCount = 0;
-        console.log("double click");
-    }
-  }
-});
+  // var clickCount = 0;
+  // var clickTimeout;
+  // var bookDivs = document.querySelectorAll('.col-2');
+  // bookDivs.forEach(function(bookDiv){
+  //   bookDiv.onclick = event => {
+  //     clickCount++;
+  //  if (clickCount === 1) {
+  //     clickTimeout = setTimeout(function() {
+  //         clickCount = 0;
+  //         console.log('Single click event triggered');
+  //         // Add your single-click logic here
+  //     }, 250);   
+  //   }else if (clickCount === 2) {
+  //       clearTimeout(clickTimeout);
+  //       clickCount = 0;
+  //       console.log("dblclick");
+  //       var url = bookDiv.getAttribute("data-url");
+  //       console.log(url);
+  //   }
+  // }
+// });
 
 </script>
 
