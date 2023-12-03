@@ -21,7 +21,7 @@
   <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="tab-{{genre}}-content">
     <div class="row">
       {% for book in books %}
-        <div class="col-2" ondblclick="window.open('{{book.url}}', '_blank')">
+        <div id={{book.book_id}} class="col-2" ondblclick="window.open('{{book.url}}', '_blank')">
           <img src="{{ book.image_url }}" alt="Image" class="img-fluid">
           <p>{{ book.title }}</p>
           <p>{{ book.author }}</p>
@@ -32,6 +32,8 @@
   {% endfor %}
   
 </div>
+
+<button onclick="submit()" class="cta-button">Submit</button>
 
 
 <!-- Add this script at the end of your HTML template to enable Bootstrap tabs -->
@@ -52,27 +54,65 @@
     });
   });
 
-  // var clickCount = 0;
-  // var clickTimeout;
-  // var bookDivs = document.querySelectorAll('.col-2');
-  // bookDivs.forEach(function(bookDiv){
-  //   bookDiv.onclick = event => {
-  //     clickCount++;
-  //  if (clickCount === 1) {
-  //     clickTimeout = setTimeout(function() {
-  //         clickCount = 0;
-  //         console.log('Single click event triggered');
-  //         // Add your single-click logic here
-  //     }, 250);   
-  //   }else if (clickCount === 2) {
-  //       clearTimeout(clickTimeout);
-  //       clickCount = 0;
-  //       console.log("dblclick");
-  //       var url = bookDiv.getAttribute("data-url");
-  //       console.log(url);
-  //   }
-  // }
-// });
+  var selectedBooks =[];
+  var clickCount = 0;
+  var clickTimeout;
+  var bookDivs = document.querySelectorAll('.col-2');
+  bookDivs.forEach(function(bookDiv){
+    bookDiv.onclick = event => {
+      clickCount++;
+   if (clickCount === 1) {
+      clickTimeout = setTimeout(function() {
+          clickCount = 0;
+          console.log('Single click event triggered');
+          var bookID = bookDiv.getAttribute("id");
+
+          var index = selectedBooks.findIndex(selectedBookID => selectedBookID=== bookID);
+          if (index === -1) {
+            // Add book to the list
+            selectedBooks.push(bookID);
+
+            // Apply styles for selection
+            bookDiv.style.opacity = '0.5';
+            bookDiv.style.backgroundColor = 'blue';
+
+            // Create and append a check mark element
+            var checkMark = document.createElement('span');
+            checkMark.innerHTML = '&#10003;'; // Check mark symbol
+            checkMark.style.color = 'white';
+            checkMark.style.position = 'absolute';
+            checkMark.style.top = '50%';
+            checkMark.style.left = '50%';
+            checkMark.style.transform = 'translate(-50%, -50%)';
+            bookDiv.appendChild(checkMark);
+
+          } else {
+            // Remove book from the list
+            selectedBooks.splice(index, 1);
+
+            // Reset styles
+            bookDiv.style.opacity = '';
+            bookDiv.style.backgroundColor = '';
+
+            // Remove check mark element
+            var checkMark = bookDiv.querySelector('span');
+            if (checkMark) {
+                bookDiv.removeChild(checkMark);
+            }
+        }
+      }, 250);   
+    }else if (clickCount === 2) {
+        clearTimeout(clickTimeout);
+        clickCount = 0;
+    }
+  }
+
+});
+
+
+function submit(){
+  console.log(selectedBooks);
+}
 
 </script>
 
