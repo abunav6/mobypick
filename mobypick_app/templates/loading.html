@@ -1,0 +1,63 @@
+<!-- temp_page.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid #3498db;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="spinner"></div>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.410.0.min.js"></script>
+    <script>
+        var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider({apiVersion: '2016-04-18'});
+        var params = {
+        UserPoolId: 'us-east-1_MFaNapqd8',  // Replace with your Cognito User Pool ID
+        AccessToken: ''  // Replace with the actual user access token
+    };
+
+    cognitoidentityserviceprovider.getUser(params, function (err, data) {
+        if (err) {
+            console.error(err);
+            redirectToErrorPage();
+        } else {
+            console.log('User ID: ', data.UserAttributes.find(attr => attr.Name === 'sub').Value);
+
+            // Assuming that the 'cognito:username' attribute is present in the user's attributes
+            const isNewUser = data.UserAttributes.some(attr => attr.Name === 'cognito:username');
+
+            if (isNewUser) {
+                console.log('User signed up');
+                window.location.href = '/select_books/';
+            } else {
+                console.log('User logged in');
+                window.location.href = '/book_recommendation/';
+            }
+        }
+    });
+    </script>
+</body>
+</html>
