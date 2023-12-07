@@ -31,5 +31,16 @@
 </head>
 <body>
     <div class="spinner"></div>
+    <script>
+                var isNewUser = sessionStorage.getItem('isNewUser');
+                if (isNewUser === 'true') {
+                    // Redirect to select_books
+                    window.location.href = "{% url 'select_books' %}";
+                } else {
+                    // Redirect to show_recommendations
+                    window.location.href = "{% url 'show_recommendations' %}";
+                }
+    </script>
+    
 </body>
 </html>

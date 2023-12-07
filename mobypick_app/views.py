@@ -13,24 +13,25 @@ def cognito_login(request):
     return redirect(f"https://mobypick.auth.us-east-1.amazoncognito.com/login?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone&redirect_uri={REDIRECT_URL}")    
 
 def loading(request):
-    import requests, base64
     code = request.GET.get('code')
-    message = bytes(f"{COGNITO_CLIENT_ID}:{COGNITO_CLIENT_SECRET}",'utf-8')
-    secret_hash = base64.b64encode(message).decode()
-    url = "https://mobypick.auth.us-east-1.amazoncognito.com/oauth2/token"
+    # CODE TO GET USER INFO
+    # import requests, base64
+    # message = bytes(f"{COGNITO_CLIENT_ID}:{COGNITO_CLIENT_SECRET}",'utf-8')
+    # secret_hash = base64.b64encode(message).decode()
+    # url = "https://mobypick.auth.us-east-1.amazoncognito.com/oauth2/token"
 
-    headers = {
-        "Authorization": f"Basic {secret_hash}",
-        "Content-Type": "application/x-www-form-urlencoded",
-    }
+    # headers = {
+    #     "Authorization": f"Basic {secret_hash}",
+    #     "Content-Type": "application/x-www-form-urlencoded",
+    # }
 
-    data = {
-        "code": code,
-        "grant_type": "authorization_code",
-        "redirect_uri": "https://localhost:8000/loading",
-    }   
-    response = requests.post(url, headers=headers, data=data)    
-    data = response.json()
+    # data = {
+    #     "code": code,
+    #     "grant_type": "authorization_code",
+    #     "redirect_uri": "https://localhost:8000/loading",
+    # }   
+    # response = requests.post(url, headers=headers, data=data)    
+    # data = response.json()
     # print(data)
     return render(request, 'loading.html')
 

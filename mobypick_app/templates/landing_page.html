@@ -56,8 +56,24 @@
   <div class="content">
     <h1>MobyPick - A Book Recommendation Engine</h1>
     <p>Ever been baffled with the choices you have? So many books to read but so little time. Worry no more, we are finally here. We provide book recommendations tailor-made for you!</p>
-    <a href="{% url 'cognito_login' %}" class="cta-button">Sign up</a>
-    <a href="{% url 'cognito_login' %}" class="cta-button">Log in</a>
+    <a href="#" class="cta-button" id="signup-btn">Sign up</a>
+    <a href="#" class="cta-button" id="signin-btn">Log in</a>
   </div>
+  <script>
+    var signinbtn = document.getElementById('signup-btn');
+    signinbtn.addEventListener('click', function() {
+      event.preventDefault();  
+      sessionStorage.setItem('isNewUser', 'true');
+
+      window.location.href = "{% url 'cognito_login' %}";
+    });
+    document.getElementById('signin-btn').addEventListener('click', function() {
+      event.preventDefault();
+      sessionStorage.setItem('isNewUser', 'false');
+
+      window.location.href = "{% url 'cognito_login' %}";
+    });
+
+  </script>
 </body>
 </html>
