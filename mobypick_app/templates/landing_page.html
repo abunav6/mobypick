@@ -63,14 +63,14 @@
     var signinbtn = document.getElementById('signup-btn');
     signinbtn.addEventListener('click', function() {
       event.preventDefault();  
-      sessionStorage.setItem('isNewUser', 'true');
-
+      localStorage.setItem('isNewUser', 'true');
+      console.log("Is new user");
       window.location.href = "{% url 'cognito_login' %}";
     });
     document.getElementById('signin-btn').addEventListener('click', function() {
       event.preventDefault();
-      sessionStorage.setItem('isNewUser', 'false');
-
+      localStorage.setItem('isNewUser', 'false');
+      console.log("Is old user");
       window.location.href = "{% url 'cognito_login' %}";
     });
 

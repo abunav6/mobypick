@@ -32,7 +32,10 @@
 <body>
     <div class="spinner"></div>
     <script>
-                var isNewUser = sessionStorage.getItem('isNewUser');
+                var isNewUser = localStorage.getItem('isNewUser');
+                console.log(isNewUser);
+                localStorage.removeItem('isNewUser');
+                
                 if (isNewUser === 'true') {
                     // Redirect to select_books
                     window.location.href = "{% url 'select_books' %}";

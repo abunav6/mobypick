@@ -1,5 +1,4 @@
 <!-- mobypick_app/templates/select_books.html -->
-
 {% extends "base/base.html" %}
 
 {% block content %}
@@ -32,6 +31,7 @@
 </div>
 
 <button onclick="submit()" class="cta-button">Submit</button>
+<button onclick="skip()" class="cta-button">Skip</button>
 
 
 <!-- Add this script at the end of your HTML template to enable Bootstrap tabs -->
@@ -110,6 +110,10 @@
 
 function submit(){
   console.log(selectedBooks);
+}
+
+function skip(){
+  window.location.href = "{% url 'show_recommendations' %}";
 }
 
 </script>
