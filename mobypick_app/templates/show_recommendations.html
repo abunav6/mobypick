@@ -50,8 +50,42 @@
             <button class="icon-button" id="next-button">Next</button>
         </div>
     </div>
-
+    {% load static %}
+    <script type="text/javascript" src="{% static 'js/sdk/lib/axios/dist/axios.standalone.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/sdk/lib/CryptoJS/rollups/hmac-sha256.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/sdk/lib/CryptoJS/rollups/sha256.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/sdk/lib/CryptoJS/components/hmac.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/sdk/lib/CryptoJS/components/enc-base64.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/sdk/lib/url-template/url-template.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/sdk/lib/apiGatewayCore/sigV4Client.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/sdk/lib/apiGatewayCore/apiGatewayClient.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/sdk/lib/apiGatewayCore/simpleHttpClient.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/sdk/lib/apiGatewayCore/utils.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/sdk/apigClient.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/sdk/aws-sdk-min.js' %}"></script>
     <script>
+        var sdk = apigClientFactory.newClient({});
+        sdk.config.update({
+                accessKeyId: 'AKIAQCUQKUEC7JI53GUM',
+                secretAccessKey: '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',
+                region: 'us-east-1',
+        });
+        </script>
+        
+        <script>
+        function getRecommendations(lang, id, genre){
+            var params = {
+                'languageCode':lang,
+                'userID':id,
+                'includeGenres':genre
+            }
+            return sdk.getRecommendationsGet(params);
+        }
+
+        getRecommendations('en', '100', 'mystery_thriller_crime').then((response) =>{
+            console.log(response);
+        });
+
         let currentIndex = 0;
         const books = {{ recommendations|safe }};
 
