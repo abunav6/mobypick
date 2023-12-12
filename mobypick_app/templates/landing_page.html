@@ -65,7 +65,7 @@
       event.preventDefault();  
       localStorage.setItem('isNewUser', 'true');
       console.log("Is new user");
-      window.location.href = "{% url 'cognito_login' %}";
+      window.location.href = "{% url 'cognito_signup' %}";
     });
     document.getElementById('signin-btn').addEventListener('click', function() {
       event.preventDefault();

@@ -15,6 +15,10 @@ def cognito_login(request):
 def cognito_logout(request):
     return redirect(f"{COGNITO_DOMAIN}/logout?client_id={COGNITO_CLIENT_ID}&logout_uri={BASE_URL}")
 
+def cognito_signup(request):
+    return redirect(f"{COGNITO_DOMAIN}/signup?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone&redirect_uri={REDIRECT_URL}")    
+
+
 def loading(request):
     code = request.GET.get('code')
     # CODE TO GET USER INFO
