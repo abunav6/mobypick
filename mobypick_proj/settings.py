@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-3h)6gcyc($%ld$n%64-v(8w0vkvt63e-7#%bmvz4rf0j$4^-@l'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['mobypick.us-east-1.elasticbeanstalk.com', '127.0.0.1', 'localhost']
 
@@ -130,7 +130,7 @@ COGNITO_CLIENT_SECRET='14e1escajfp87cpfb0eu9dm3t1i0bsl7gu7jnucl8mf2m4gmfvsm'
 COGNITO_REGION='us-east-1'
 COGNITO_DOMAIN='https://mobypick.auth.us-east-1.amazoncognito.com'
 
-BASE_URL = "https%3A%2F%2Fmobypick.us-east-1.elasticbeanstalk.com"
-# BASE_URL = "https%3A%2F%2Flocalhost%3A8000"
-REDIRECT_URL = "https%3A%2F%2Fmobypick.us-east-1.elasticbeanstalk.com%2Floading"
-# REDIRECT_URL="https%3A%2F%2Flocalhost%3A8000%2Floading"
+# BASE_URL = "https%3A%2F%2Fmobypick.us-east-1.elasticbeanstalk.com"
+BASE_URL = "https%3A%2F%2Flocalhost%3A8000"
+# REDIRECT_URL = "https%3A%2F%2Fmobypick.us-east-1.elasticbeanstalk.com%2Floading"
+REDIRECT_URL="https%3A%2F%2Flocalhost%3A8000%2Floading"

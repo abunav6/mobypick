@@ -4,3 +4,4 @@ django-sslserver==0.22
 sqlparse==0.4.4
 boto3==1.33.4
 requests==2.31.0
+jwt==1.3.1

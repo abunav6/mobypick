@@ -64,12 +64,14 @@
     signinbtn.addEventListener('click', function() {
       event.preventDefault();  
       localStorage.setItem('isNewUser', 'true');
+      document.cookie="isNewUser=true"
       console.log("Is new user");
       window.location.href = "{% url 'cognito_signup' %}";
     });
     document.getElementById('signin-btn').addEventListener('click', function() {
       event.preventDefault();
       localStorage.setItem('isNewUser', 'false');
+      document.cookie="isNewUser=false"
       console.log("Is old user");
       window.location.href = "{% url 'cognito_login' %}";
     });
