@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from mobypick_proj.settings import COGNITO_CLIENT_ID,COGNITO_CLIENT_SECRET,REDIRECT_URL
+from mobypick_proj.settings import COGNITO_CLIENT_ID,COGNITO_CLIENT_SECRET,REDIRECT_URL, COGNITO_DOMAIN, BASE_URL
 
 def landing_page(request):
     return render(request, 'landing_page.html')
@@ -10,7 +10,10 @@ def select_books(request):
     return render(request, 'select_books.html', {'items':items})
 
 def cognito_login(request):
-    return redirect(f"https://mobypick.auth.us-east-1.amazoncognito.com/login?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone&redirect_uri={REDIRECT_URL}")    
+    return redirect(f"{COGNITO_DOMAIN}/login?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone&redirect_uri={REDIRECT_URL}")    
+
+def cognito_logout(request):
+    return redirect(f"{COGNITO_DOMAIN}/logout?client_id={COGNITO_CLIENT_ID}&logout_uri={BASE_URL}")
 
 def loading(request):
     code = request.GET.get('code')
@@ -36,12 +39,4 @@ def loading(request):
     return render(request, 'loading.html')
 
 def show_recommendations(request):
-    recommendations = [
-        {"title": "Macbeth", "author": "William Shakespeare", "poster_url": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1459795224i/8852.jpg"},
-        {"title": "Othello", "author": "William Shakespeare", "poster_url": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1459795105i/12996.jpg"},
-        {"title": "Hamlet", "author": "William Shakespeare", "poster_url": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1351051208i/1420.jpg"},
-        # Add more books as needed
-    ]
-
-    context = {"recommendations": recommendations}
-    return render(request, 'show_recommendations.html', context)
+    return render(request, 'show_recommendations.html')
