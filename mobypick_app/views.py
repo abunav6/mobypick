@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from mobypick_proj.settings import COGNITO_CLIENT_ID,COGNITO_CLIENT_SECRET,REDIRECT_URL, COGNITO_DOMAIN, BASE_URL, COGNITO_REGION
+from mobypick_proj.settings import COGNITO_CLIENT_ID,COGNITO_CLIENT_SECRET,REDIRECT_URL, COGNITO_DOMAIN, BASE_URL, COGNITO_REGION, AWS_ACCESS_KEY, AWS_SECRET_KEY, DYNAMO_TABLE
 import requests, base64
 import boto3
 
@@ -58,7 +58,33 @@ def loading(request):
         userInfo = response.json()
         email = userInfo['email']
         userID = userInfo['username']
-        # TODO: push the userID and email to the DynamoDB table, push access token to cookies, and then redirect to loading page
+        # Initialize DynamoDB client
+        dynamodb = boto3.resource('dynamodb', aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY, region_name=COGNITO_REGION)
+
+        # Specify your DynamoDB table
+        table = dynamodb.Table(DYNAMO_TABLE)
+
+        # Replace these values with your actual data
+
+        want_to_read = []
+        finished_reading = []
+        language_pref = 'en'
+        genre_pref = ''
+
+        # Construct item to be added to DynamoDB
+        item = {
+            'userID': userID,
+            'email': email,
+            'wantToRead': want_to_read,
+            'finishedReading': finished_reading,
+            'languagePref': language_pref,
+            'genrePref': genre_pref
+        }
+
+        response = table.put_item(Item=item)
+
+        print("PutItem succeeded:", response)
+
     
     return render(request, 'loading.html')
 

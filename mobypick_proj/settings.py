@@ -134,3 +134,8 @@ COGNITO_DOMAIN='https://mobypick.auth.us-east-1.amazoncognito.com'
 BASE_URL = "https%3A%2F%2Flocalhost%3A8000"
 # REDIRECT_URL = "https%3A%2F%2Fmobypick.us-east-1.elasticbeanstalk.com%2Floading"
 REDIRECT_URL="https%3A%2F%2Flocalhost%3A8000%2Floading"
+
+
+AWS_ACCESS_KEY = 'AKIAQCUQKUEC7JI53GUM'
+AWS_SECRET_KEY = '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'
+DYNAMO_TABLE = 'UserInfo'
