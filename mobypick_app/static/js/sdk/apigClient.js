@@ -86,13 +86,19 @@ apigClientFactory.newClient = function (config) {
     apigClient.getRecommendationsGet = function (params, body, additionalParams) {
         if(additionalParams === undefined) { additionalParams = {}; }
         
-        apiGateway.core.utils.assertParametersDefined(params, ['userID', 'languageCode', 'includeGenres'], ['body']);
-        
+        apiGateway.core.utils.assertParametersDefined(params, ['userID'], ['body']);
+        var qsps = apiGateway.core.utils.parseParametersToObject(params, ['userID', 'languageCode', 'includeGenres']);
+        if(qsps['languageCode'] == undefined){
+            delete qsps.languageCode;
+        }
+        if(qsps['includeGenres'] == undefined){
+            delete qsps.includeGenres;
+        }
         var getRecommendationsGetRequest = {
             verb: 'get'.toUpperCase(),
             path: pathComponent + uritemplate('/getRecommendations').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
             headers: apiGateway.core.utils.parseParametersToObject(params, []),
-            queryParams: apiGateway.core.utils.parseParametersToObject(params, ['userID', 'languageCode', 'includeGenres']),
+            queryParams: qsps,
             body: body
         };
         

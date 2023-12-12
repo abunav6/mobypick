@@ -22,56 +22,55 @@ def cognito_signup(request):
 
 
 def loading(request):
-    # TODO: push the user details into the new dynamoDB table
     code = request.GET.get('code')
-    isNewUser = request.COOKIES.get('isNewUser')
-    print(isNewUser)
-    if isNewUser:
+    message = bytes(f"{COGNITO_CLIENT_ID}:{COGNITO_CLIENT_SECRET}",'utf-8')
+    secret_hash = base64.b64encode(message).decode()
+
+    url = url = f"{COGNITO_DOMAIN}/oauth2/token"  
+    headers = {
+        "Authorization": f"Basic {secret_hash}",
+        "Content-Type": "application/x-www-form-urlencoded",
+    }
+
+    data = {
+        "code": f'{code}',
+        "grant_type": "authorization_code",
+        "scope":"email+openid+phone+aws.cognito.signin.user.admin",
+        "redirect_uri": "https://localhost:8000/loading",
+    } 
+
+    response = requests.post(url, headers=headers, data=data)    
+    data = response.json()
+    print(data)
+
     
-        message = bytes(f"{COGNITO_CLIENT_ID}:{COGNITO_CLIENT_SECRET}",'utf-8')
-        secret_hash = base64.b64encode(message).decode()
+    url = f"{COGNITO_DOMAIN}/oauth2/userInfo"
+    headers = {
+        "Content-Type": "application/x-amz-json-1.1",
+        "Authorization": f"Bearer {data['access_token']}",
+    }
 
-        url = url = f"{COGNITO_DOMAIN}/oauth2/token"  
-        headers = {
-            "Authorization": f"Basic {secret_hash}",
-            "Content-Type": "application/x-www-form-urlencoded",
-        }
+    response = requests.get(url, headers=headers)
 
-        data = {
-            "code": f'{code}',
-            "grant_type": "authorization_code",
-            "scope":"email+openid+phone+aws.cognito.signin.user.admin",
-            "redirect_uri": "https://localhost:8000/loading",
-        } 
+    userInfo = response.json()
+    email = userInfo['email']
+    userID = userInfo['username']
+    print(userInfo)
 
-        response = requests.post(url, headers=headers, data=data)    
-        data = response.json()
+    
+    isNewUser = request.COOKIES.get('isNewUser')
 
-        url = f"{COGNITO_DOMAIN}/oauth2/userInfo"
-        headers = {
-            "Content-Type": "application/x-amz-json-1.1",
-            "Authorization": f"Bearer {data['access_token']}",
-        }
+    if isNewUser=="true":
 
-        response = requests.get(url, headers=headers)
-
-        userInfo = response.json()
-        email = userInfo['email']
-        userID = userInfo['username']
-        # Initialize DynamoDB client
         dynamodb = boto3.resource('dynamodb', aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY, region_name=COGNITO_REGION)
 
-        # Specify your DynamoDB table
         table = dynamodb.Table(DYNAMO_TABLE)
-
-        # Replace these values with your actual data
 
         want_to_read = []
         finished_reading = []
         language_pref = 'en'
         genre_pref = ''
 
-        # Construct item to be added to DynamoDB
         item = {
             'userID': userID,
             'email': email,
@@ -83,10 +82,9 @@ def loading(request):
 
         response = table.put_item(Item=item)
 
-        print("PutItem succeeded:", response)
+        print("PutItem :", response)
 
-    
-    return render(request, 'loading.html')
+    return render(request, 'loading.html', {'userID':userID})
 
 def show_recommendations(request):
     return render(request, 'show_recommendations.html')

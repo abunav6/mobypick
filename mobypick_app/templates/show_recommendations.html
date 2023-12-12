@@ -1,5 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+
+{% extends "base/base.html" %}
+
+{% block content %}
+<html>
  <!-- TODO: Add a Manage Preferences button that redirects to profile page -->
  <!-- TODO: Create a profile page, with the genre and language preferences as input fields, to UPDATE the dynamoDB table -->
 <head>
@@ -117,10 +120,15 @@
         function getRecommendations(lang, id, genre){
             var params = {
                 p1: 'Access-Control-Allow-Origin',
-                'languageCode':lang,
                 'userID':id,
-                'includeGenres':genre
             }
+            if(lang != null){
+                params['languageCode'] = lang;
+            }
+            if(genre != null){
+                params['includeGenres'] = genre;
+            }
+            console.log(params);
             return sdk.getRecommendationsGet(params, {}, {});
         }
 
@@ -151,12 +159,9 @@
 
             updateBookInfo(currentIndex);
         }
-
-        
-        // TODO: change params to user preferences
-
-        getRecommendations('en', '100', 'mystery_thriller_crime').then((response) =>{
-            
+        var userID = localStorage.getItem('userID');
+        console.log(userID);
+        getRecommendations(null,userID,null).then((response) =>{
             console.log(response);
             hideLoadingSpinner();
             if(response.status == 200){
@@ -172,3 +177,4 @@
     
 </body>
 </html>
+{% endblock%}
