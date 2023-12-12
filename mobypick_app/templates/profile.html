@@ -1,0 +1,95 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Profile</title>
+</head>
+<body>
+
+<script>
+    window.onload = function() {
+        var email = localStorage.getItem('email');
+        var language_preference = localStorage.getItem('language_preference');
+        var genre_pref = localStorage.getItem('genre_pref');
+
+        var genres=['fiction', 'mystery_thriller_crime', 'romance', 'non_fiction', 'history_biography', 'fantasy_paranormal', 'children', 'young_adult', 'comics_graphic', 'poetry'];
+
+        document.getElementById('userId').value = email;
+
+        var languageSelect = document.getElementById('languagePreference');
+        var genreSelect = document.getElementById('genrePreference');
+
+        for (var i = 0; i < languageSelect.options.length; i++) {
+            console.log(languageSelect.options[i]);
+            if (languageSelect.options[i].value == language_preference) {
+                languageSelect.options[i].selected = true;
+                break;
+            }
+        }
+        for (var j = 0; j < genres.length; j++) {
+            var option = document.createElement('option');
+            option.value = genres[j];
+            option.text = genres[j];            
+            if (genres[j].trim() == genre_pref.trim()) {
+                option.selected = "true";
+            }else{
+                option.selected="false";
+            }
+            genreSelect.add(option);
+
+        }
+
+        var formElements = document.querySelectorAll('select');
+        formElements.forEach(function(element) {
+            element.addEventListener('change', function() {
+                enableUpdateButton();
+            });
+        });
+
+        function enableUpdateButton() {
+            var updateButton = document.getElementById('updateButton');
+            updateButton.disabled = false;
+        }
+    };
+</script>
+
+<div style="text-align: center;">
+    <h1>Your Profile</h1>
+</div>
+<div style="text-align: center; margin-top: 20px;">
+<form method="post" action="{% url 'update_profile' %}">
+    {% csrf_token %}
+    <div>
+        <label for="userId">User ID:</label>
+        <input type="text" id="userId" disabled>
+    </div>
+
+    <div>
+        <label for="languagePreference">Language Preference:</label>
+        <select id="languagePreference" name="language_preference">
+            <option value="en" selected="false">English</option>
+            <option value="es" selected="false">Spanish</option>
+            <option value="fr" selected="false">French</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="genrePreference">Genre Preference:</label>
+        <select id="genrePreference" name="genre_preference"></select>
+    </div>
+
+    <button type="submit" id="updateButton" disabled>Update</button></form>
+</div>
+<div style="text-align: center; margin-top: 20px;">
+        <button>See books in your Want-To-Read shelf</button>
+
+        <button>See books you have read</button>
+</div>
+
+</body>
+{% endblock%}
+
+

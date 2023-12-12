@@ -41,8 +41,6 @@ def loading(request):
 
     response = requests.post(url, headers=headers, data=data)    
     data = response.json()
-    print(data)
-
     
     url = f"{COGNITO_DOMAIN}/oauth2/userInfo"
     headers = {
@@ -55,17 +53,12 @@ def loading(request):
     userInfo = response.json()
     email = userInfo['email']
     userID = userInfo['username']
-    print(userInfo)
-
     
     isNewUser = request.COOKIES.get('isNewUser')
+    dynamodb = boto3.resource('dynamodb', aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY, region_name=COGNITO_REGION)
+    table = dynamodb.Table(DYNAMO_TABLE)
 
     if isNewUser=="true":
-
-        dynamodb = boto3.resource('dynamodb', aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY, region_name=COGNITO_REGION)
-
-        table = dynamodb.Table(DYNAMO_TABLE)
-
         want_to_read = []
         finished_reading = []
         language_pref = 'en'
@@ -84,7 +77,48 @@ def loading(request):
 
         print("PutItem :", response)
 
-    return render(request, 'loading.html', {'userID':userID})
+    else:
+        response = table.scan(
+            FilterExpression='userID = :user_id',
+            ExpressionAttributeValues={':user_id': userID}
+        )
+        if 'Items' in response and len(response['Items'])>0:
+            item = response['Items'][0]
+            genre_pref = item.get('genrePref', '')
+            language_pref = item.get('languagePref', '')
+
+    user = { 
+        'id': userID,
+        'email': email,
+        'language_preference': language_pref,
+        'genre_pref':genre_pref
+    }
+    print(user)
+    return render(request, 'loading.html', {'user': user})
 
 def show_recommendations(request):
     return render(request, 'show_recommendations.html')
+
+
+def profile(request):
+    return render(request, 'profile.html')
+
+def update_profile(request):
+    updated_lang = request.POST['language_preference']
+    updated_genre = request.POST['genre_preference']
+    userID = request.COOKIES.get('userID')
+
+    dynamodb = boto3.resource('dynamodb', aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY, region_name=COGNITO_REGION)
+    table = dynamodb.Table(DYNAMO_TABLE)
+
+    response = table.update_item(
+        Key={'userID': userID},
+            UpdateExpression='SET languagePref = :lang, genrePref = :genre',
+            ExpressionAttributeValues={':lang': updated_lang, ':genre': updated_genre},
+            ReturnValues='UPDATED_NEW'
+    )
+    if 'Attributes' in response:
+        print("updated")
+    else:
+        print("failed")
+    return render(request, 'profile.html')

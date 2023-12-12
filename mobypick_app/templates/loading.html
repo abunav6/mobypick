@@ -1,6 +1,6 @@
-<!-- temp_page.html -->
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base/base.html" %}
+
+{% block content %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,17 +34,21 @@
     <script>
                 var isNewUser = localStorage.getItem('isNewUser');
                 console.log(isNewUser);
-                localStorage.removeItem('isNewUser');
-                console.log("{{userID}}")
-                localStorage.setItem('userID', " {{ userID }} ");
+                localStorage.setItem('userID', " {{ user.id }} ");
+                document.cookie="userID={{user.id}};path=/"
+                localStorage.setItem('email', " {{ user.email }} ");
+                localStorage.setItem('genre_pref', " {{ user.genre_pref }} ");
+                localStorage.setItem('language_preference', " {{ user.language_preference }} ");
+
                 if (isNewUser === 'true') {
                     // Redirect to select_books
                     window.location.href = "{% url 'select_books' %}";
                 } else {
-                    // Redirect to show_recommendations
-                    window.location.href = "{% url 'show_recommendations' %}";
+                    // Redirect to profile page
+                    window.location.href = "{% url 'profile' %}";
                 }
     </script>
     
 </body>
-</html>
+{% endblock%}
+
