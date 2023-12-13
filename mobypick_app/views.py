@@ -36,7 +36,7 @@ def loading(request):
         "code": f'{code}',
         "grant_type": "authorization_code",
         "scope":"email+openid+phone+aws.cognito.signin.user.admin",
-        "redirect_uri": "https://localhost:8000/loading",
+        "redirect_uri": "https://mobypick.us-east-1.elasticbeanstalk.com/loading",
     } 
 
     response = requests.post(url, headers=headers, data=data)    
