@@ -130,10 +130,10 @@ COGNITO_CLIENT_SECRET='14e1escajfp87cpfb0eu9dm3t1i0bsl7gu7jnucl8mf2m4gmfvsm'
 COGNITO_REGION='us-east-1'
 COGNITO_DOMAIN='https://mobypick.auth.us-east-1.amazoncognito.com'
 
-# BASE_URL = "https%3A%2F%2Fmobypick.us-east-1.elasticbeanstalk.com"
-BASE_URL = "https%3A%2F%2Flocalhost%3A8000"
-# REDIRECT_URL = "https%3A%2F%2Fmobypick.us-east-1.elasticbeanstalk.com%2Floading"
-REDIRECT_URL="https%3A%2F%2Flocalhost%3A8000%2Floading"
+BASE_URL = "https%3A%2F%2Fmobypick.us-east-1.elasticbeanstalk.com"
+# BASE_URL = "https%3A%2F%2Flocalhost%3A8000"
+REDIRECT_URL = "https%3A%2F%2Fmobypick.us-east-1.elasticbeanstalk.com%2Floading"
+# REDIRECT_URL="https%3A%2F%2Flocalhost%3A8000%2Floading"
 
 
 AWS_ACCESS_KEY = 'AKIAQCUQKUEC7JI53GUM'
