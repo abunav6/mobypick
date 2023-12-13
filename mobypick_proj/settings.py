@@ -134,6 +134,8 @@ BASE_URL = "https%3A%2F%2Fmobypick.us-east-1.elasticbeanstalk.com"
 # BASE_URL = "https%3A%2F%2Flocalhost%3A8000"
 REDIRECT_URL = "https%3A%2F%2Fmobypick.us-east-1.elasticbeanstalk.com%2Floading"
 # REDIRECT_URL="https%3A%2F%2Flocalhost%3A8000%2Floading"
+REQUEST_REDIRECT_URL="https://mobypick.us-east-1.elasticbeanstalk.com/loading"
+# REQUEST_REDIRECT_URL="https://localhost:8000/loading"
 
 
 AWS_ACCESS_KEY = 'AKIAQCUQKUEC7JI53GUM'

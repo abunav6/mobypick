@@ -176,8 +176,22 @@
             updateBookInfo(currentIndex);
         }
         var userID = localStorage.getItem('userID');
-        var language_preference = localStorage.getItem('language_preference').trim();
-        var genre_pref= localStorage.getItem('genre_pref').trim();
+        var genre_pref;
+        if("{{genre_pref}}" == undefined){
+            genre_pref= localStorage.getItem('genre_pref').trim();
+        }else{
+            genre_pref= "{{genre_pref}}";
+        }
+        var language_preference;
+        if("{{language_preference}}" == undefined){
+            language_preference = localStorage.getItem('language_preference').trim();
+        }else{
+            language_preference="{{language_preference}}";
+        }
+
+        console.log(language_preference,userID,genre_pref);
+        
+        
         getRecommendations(language_preference,userID,genre_pref).then((response) =>{
             console.log(response);
             hideLoadingSpinner();

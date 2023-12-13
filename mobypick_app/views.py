@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from mobypick_proj.settings import COGNITO_CLIENT_ID,COGNITO_CLIENT_SECRET,REDIRECT_URL, COGNITO_DOMAIN, BASE_URL, COGNITO_REGION, AWS_ACCESS_KEY, AWS_SECRET_KEY, DYNAMO_TABLE
+from mobypick_proj.settings import COGNITO_CLIENT_ID,COGNITO_CLIENT_SECRET,REDIRECT_URL, COGNITO_DOMAIN, BASE_URL, COGNITO_REGION, AWS_ACCESS_KEY, AWS_SECRET_KEY, DYNAMO_TABLE, REQUEST_REDIRECT_URL
 import requests, base64
 import boto3
 
@@ -36,7 +36,7 @@ def loading(request):
         "code": f'{code}',
         "grant_type": "authorization_code",
         "scope":"email+openid+phone+aws.cognito.signin.user.admin",
-        "redirect_uri": "https://mobypick.us-east-1.elasticbeanstalk.com/loading",
+        "redirect_uri": REQUEST_REDIRECT_URL
     } 
 
     response = requests.post(url, headers=headers, data=data)    
@@ -96,8 +96,8 @@ def loading(request):
     print(user)
     return render(request, 'loading.html', {'user': user})
 
-def show_recommendations(request):
-    return render(request, 'show_recommendations.html')
+def show_recommendations(request, context):
+    return render(request, 'show_recommendations.html', context)
 
 
 def profile(request):
@@ -122,3 +122,18 @@ def update_profile(request):
     else:
         print("failed")
     return render(request, 'profile.html')
+
+
+def getLatestRecommendations(request):
+    userID = request.COOKIES.get('userID')
+    dynamodb = boto3.resource('dynamodb', aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY, region_name=COGNITO_REGION)
+    table = dynamodb.Table(DYNAMO_TABLE)
+    response = table.scan(
+            FilterExpression='userID = :user_id',
+            ExpressionAttributeValues={':user_id': userID}
+    )
+    if 'Items' in response and len(response['Items'])>0:
+        item = response['Items'][0]
+        genre_pref = item.get('genrePref', '')
+        language_pref = item.get('languagePref', '')
+        return show_recommendations(request, {'genre_pref':genre_pref,'language_preference':language_pref })
