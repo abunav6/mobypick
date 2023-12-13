@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from mobypick_proj.settings import COGNITO_CLIENT_ID,COGNITO_CLIENT_SECRET,REDIRECT_URL, COGNITO_DOMAIN, BASE_URL, COGNITO_REGION, AWS_ACCESS_KEY, AWS_SECRET_KEY, DYNAMO_TABLE, REQUEST_REDIRECT_URL
+from django.http import JsonResponse
+from mobypick_proj.settings import COGNITO_CLIENT_ID,COGNITO_CLIENT_SECRET,REDIRECT_URL, COGNITO_DOMAIN, BASE_URL, COGNITO_REGION, AWS_ACCESS_KEY, AWS_SECRET_KEY, DYNAMO_USER_TABLE, REQUEST_REDIRECT_URL, DYNAMO_BOOK_TABLE
 import requests, base64
 import boto3
 
@@ -56,7 +57,7 @@ def loading(request):
     
     isNewUser = request.COOKIES.get('isNewUser')
     dynamodb = boto3.resource('dynamodb', aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY, region_name=COGNITO_REGION)
-    table = dynamodb.Table(DYNAMO_TABLE)
+    table = dynamodb.Table(DYNAMO_USER_TABLE)
 
     if isNewUser=="true":
         print("adding new user")
@@ -110,7 +111,7 @@ def update_profile(request):
     userID = request.COOKIES.get('userID')
 
     dynamodb = boto3.resource('dynamodb', aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY, region_name=COGNITO_REGION)
-    table = dynamodb.Table(DYNAMO_TABLE)
+    table = dynamodb.Table(DYNAMO_USER_TABLE)
 
     response = table.update_item(
         Key={'userID': userID},
@@ -130,7 +131,7 @@ def update_profile(request):
 def getLatestRecommendations(request):
     userID = request.COOKIES.get('userID')
     dynamodb = boto3.resource('dynamodb', aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY, region_name=COGNITO_REGION)
-    table = dynamodb.Table(DYNAMO_TABLE)
+    table = dynamodb.Table(DYNAMO_USER_TABLE)
     response = table.scan(
             FilterExpression='userID = :user_id',
             ExpressionAttributeValues={':user_id': userID}
@@ -146,7 +147,7 @@ def put_books(request):
     userID = request.COOKIES.get('userID')
     wantoread = request.COOKIES.get('selectedBooks')
     dynamodb = boto3.resource('dynamodb', aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY, region_name=COGNITO_REGION)
-    table = dynamodb.Table(DYNAMO_TABLE)
+    table = dynamodb.Table(DYNAMO_USER_TABLE)
 
     response = table.update_item(
         Key={'userID': userID},
@@ -161,3 +162,43 @@ def put_books(request):
         #  TODO: add an alert to show that the update failed
         print("failed")
     return render(request, "profile.html")
+
+
+def fetch_books(request, book_type):
+    print("need to fetch books")    
+    userID = request.COOKIES.get('userID')
+    print(userID)
+    dynamodb = boto3.resource('dynamodb', aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY, region_name=COGNITO_REGION)
+    table = dynamodb.Table(DYNAMO_USER_TABLE)
+    response = table.scan(
+            FilterExpression='userID = :user_id',
+            ExpressionAttributeValues={':user_id': userID}
+    )
+    
+    if 'Items' in response and len(response['Items'])>0:
+        user = response['Items'][0]
+        if book_type=="w":
+            books = [k.strip() for k in user['wantToRead'].split(",")]
+
+        else:
+            books = [k.strip() for k in user['finishedReading'].split(",")]
+        
+        items = []
+        if books:
+            for book in books:
+                table = dynamodb.Table(DYNAMO_BOOK_TABLE)
+                response = table.scan(
+                    FilterExpression='ITEM_ID = :book_id',
+                    ExpressionAttributeValues={':book_id': book}
+                ) 
+                if 'Items' in response and len(response['Items'])>0:
+                    bookData = response['Items'][0]
+                    items.append({
+                        'title': bookData['original_title'],
+                        'author':bookData['name'],
+                        'image_url':bookData['image_url'],
+                        'url':bookData['url']
+                    })
+
+        print(items)
+        return JsonResponse({'books': items})

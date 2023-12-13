@@ -36,6 +36,23 @@
             cursor: pointer;
             border-radius: 5px;
         }  
+
+        .scrollable-list {
+            margin-top: 50px;
+            height: 300px;
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 10px; 
+            
+        }
+
+        .scrollable-list div {
+            flex: 0 0 auto;
+            margin-right: 10px; /* Optional: Add margin between items */
+        }
+
+
     </style>
 </head>
 <body>
@@ -47,6 +64,7 @@
         var genre_pref = localStorage.getItem('genre_pref');
         var genres=['fiction', 'mystery_thriller_crime', 'romance', 'non_fiction', 'history_biography', 'fantasy_paranormal', 'children', 'young_adult', 'comics_graphic', 'poetry'];
 
+        document.getElementById('close-btn').style.display = 'none';
         document.getElementById('userId').value = email;
 
         var languageSelect = document.getElementById('languagePreference');
@@ -91,6 +109,45 @@
         }
         window.location.href = "{% url 'cognito_logout' %}"
     }
+
+    function showBooks(type){
+        // Make an AJAX request to fetch books
+        document.getElementById('close-btn').style.display = 'block';
+
+        const bookList = document.getElementById('book-list');
+        bookList.innerHTML = '';
+
+        fetch(`/fetch_books/${type}/`)
+            .then(response => response.json())
+            .then(data => {
+                // Render the books in the template
+                console.log(data);
+
+                data.books.forEach(book => {
+                    const bookDiv = document.createElement('div');
+                    bookDiv.innerHTML = `
+                        <div ondblclick="window.open('${book.url}', '_blank')">
+                            <img src="${book.image_url}" alt="Image" class="img-fluid">
+                            <p>${book.title}</p>
+                            <p>${book.author}</p>
+                        </div>
+                    `;
+                    bookList.appendChild(bookDiv);
+                });
+            })
+            .catch(error => {
+                const bookDiv = document.createElement('div');
+                bookDiv.innerHTML = `
+                    <p> Nothing to see here! </p>
+                    `;
+                bookList.appendChild(bookDiv);
+            });
+    }
+    function hide(){
+        document.getElementById('book-list').innerHTML='';
+        document.getElementById('close-btn').style.display = 'none';
+
+    }
 </script>
 
 <button id="logout-button" onclick="logout()">Logout</button>
@@ -124,14 +181,20 @@
     <button type="submit" id="updateButton" disabled class="cta-button">Update</button></form>
 </div>
 <div style="text-align: center; margin-top: 20px;">
-        <button class="cta-button">Check Want-To-Read Shelf</button>
+        <button class="cta-button" onclick="showBooks('w')">Check Want-To-Read Shelf</button>
 
-        <button class="cta-button">Check Have-Read Shelf</button>
+        <button class="cta-button" onclick="showBooks('r')">Check Have-Read Shelf</button>
 </div>
 
 <div style="text-align: center; margin-top: 20px;">
     <button class="cta-button" onclick="getRecommendations()">Get Recommendations!</button>
 </div>
+
+
+<div id="book-list" class="scrollable-list">
+</div>
+<button class="cta-button" id="close-btn" onclick="hide()">Close</button>
+
 
 </body>
 {% endblock%}
