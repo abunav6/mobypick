@@ -6,6 +6,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Profile</title>
+    <style>
+        .cta-button {
+      display: inline-block;
+      padding: 5px 10px;
+      font-size: 1em;
+      text-decoration: none;
+      background-color: #3498db; 
+      color: #ffffff; 
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .cta-button:hover {
+      background-color: #2980b9; 
+    }
+    </style>
 </head>
 <body>
 
@@ -14,7 +30,6 @@
         var email = localStorage.getItem('email');
         var language_preference = localStorage.getItem('language_preference');
         var genre_pref = localStorage.getItem('genre_pref');
-
         var genres=['fiction', 'mystery_thriller_crime', 'romance', 'non_fiction', 'history_biography', 'fantasy_paranormal', 'children', 'young_adult', 'comics_graphic', 'poetry'];
 
         document.getElementById('userId').value = email;
@@ -22,24 +37,13 @@
         var languageSelect = document.getElementById('languagePreference');
         var genreSelect = document.getElementById('genrePreference');
 
-        for (var i = 0; i < languageSelect.options.length; i++) {
-            console.log(languageSelect.options[i]);
-            if (languageSelect.options[i].value == language_preference) {
-                languageSelect.options[i].selected = true;
-                break;
-            }
-        }
+        // TODO: FIX the selected index logic
+
         for (var j = 0; j < genres.length; j++) {
             var option = document.createElement('option');
             option.value = genres[j];
             option.text = genres[j];            
-            if (genres[j].trim() == genre_pref.trim()) {
-                option.selected = "true";
-            }else{
-                option.selected="false";
-            }
             genreSelect.add(option);
-
         }
 
         var formElements = document.querySelectorAll('select');
@@ -53,7 +57,11 @@
             var updateButton = document.getElementById('updateButton');
             updateButton.disabled = false;
         }
+        
     };
+    function getRecommendations(){
+            window.location.href ='{% url "show_recommendations" %}'
+    }
 </script>
 
 <div style="text-align: center;">
@@ -70,9 +78,9 @@
     <div>
         <label for="languagePreference">Language Preference:</label>
         <select id="languagePreference" name="language_preference">
-            <option value="en" selected="false">English</option>
-            <option value="es" selected="false">Spanish</option>
-            <option value="fr" selected="false">French</option>
+            <option value="en">English</option>
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
         </select>
     </div>
 
@@ -81,12 +89,16 @@
         <select id="genrePreference" name="genre_preference"></select>
     </div>
 
-    <button type="submit" id="updateButton" disabled>Update</button></form>
+    <button type="submit" id="updateButton" disabled class="cta-button">Update</button></form>
 </div>
 <div style="text-align: center; margin-top: 20px;">
-        <button>See books in your Want-To-Read shelf</button>
+        <button class="cta-button">Check Want-To-Read Shelf</button>
 
-        <button>See books you have read</button>
+        <button class="cta-button">Check Have-Read Shelf</button>
+</div>
+
+<div style="text-align: center; margin-top: 20px;">
+    <button class="cta-button" onclick="getRecommendations()">Get Recommendations!</button>
 </div>
 
 </body>

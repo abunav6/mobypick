@@ -3,8 +3,6 @@
 
 {% block content %}
 <html>
- <!-- TODO: Add a Manage Preferences button that redirects to profile page -->
- <!-- TODO: Create a profile page, with the genre and language preferences as input fields, to UPDATE the dynamoDB table -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -178,8 +176,9 @@
             updateBookInfo(currentIndex);
         }
         var userID = localStorage.getItem('userID');
-        // TODO: get the local storage value for user lang and genre prefs, and add them here instead of null
-        getRecommendations(null,userID,null).then((response) =>{
+        var language_preference = localStorage.getItem('language_preference').trim();
+        var genre_pref= localStorage.getItem('genre_pref').trim();
+        getRecommendations(language_preference,userID,genre_pref).then((response) =>{
             console.log(response);
             hideLoadingSpinner();
             if(response.status == 200){
