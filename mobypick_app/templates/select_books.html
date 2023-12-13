@@ -110,7 +110,8 @@
 
 function submit(){
   console.log(selectedBooks);
-  // TODO: need to add this to the wantToRead list in DynamoDB for this user
+  document.cookie="selectedBooks="+selectedBooks+";path=/"
+  window.location.href = "{% url 'put_books' %}"
 }
 
 function skip(){
