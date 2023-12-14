@@ -98,7 +98,7 @@ def loading(request):
     print(user)
     return render(request, 'loading.html', {'user': user})
 
-def show_recommendations(request, context):
+def show_recommendations(request, context=None):
     return render(request, 'show_recommendations.html', context)
 
 
@@ -202,3 +202,5 @@ def fetch_books(request, book_type):
 
         print(items)
         return JsonResponse({'books': items})
+
+

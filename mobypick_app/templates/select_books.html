@@ -111,7 +111,7 @@
 function submit(){
   console.log(selectedBooks);
   document.cookie="selectedBooks="+selectedBooks+";path=/"
-  window.location.href = "{% url 'put_books' %}"
+  window.location.href = "{% url 'put_books' %}" 
 }
 
 function skip(){

@@ -99,9 +99,9 @@
         
         <div id="buttons-container">
             <button class="icon-button" id="prev-button" onclick="changeBook(-1)">Previous</button>
-            <button class="icon-button" onclick="logAction('already read')">Check</button>
+            <button class="icon-button" onclick="addToDynamo('r')">Check</button>
             <button class="icon-button" onclick="logAction('didn\'t like recommendation')">Thumbs Down</button>
-            <button class="icon-button" onclick="logAction('want to read')">Plus</button>
+            <button class="icon-button" onclick="addToDynamo('w')">Plus</button>
             <button class="icon-button" id="next-button" onclick="changeBook(1)">Next</button>
         </div>
     </div>
@@ -141,6 +141,7 @@
                 }
                 window.location.href = "{% url 'cognito_logout' %}"
             }
+
         </script>
         <script>
         function getRecommendations(lang, id, genre){
@@ -166,9 +167,9 @@
         }
         
         function updateBookInfo(index) {
-            document.getElementById('poster').src = books[Object.keys(books)[currentIndex]].poster_url;
-            document.getElementById('book-title').innerText = books[Object.keys(books)[currentIndex]].title;
-            document.getElementById('book-author').innerText = books[Object.keys(books)[currentIndex]].author;
+            document.getElementById('poster').src = books[currentIndex].poster_url;
+            document.getElementById('book-title').innerText = books[currentIndex].title;
+            document.getElementById('book-author').innerText = books[currentIndex].author;
         }
 
         function changeBook(direction) {
