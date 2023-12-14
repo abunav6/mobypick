@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from mobypick_proj.settings import COGNITO_CLIENT_ID,COGNITO_CLIENT_SECRET,REDIRECT_URL, COGNITO_DOMAIN, BASE_URL, COGNITO_REGION, AWS_ACCESS_KEY, AWS_SECRET_KEY, DYNAMO_USER_TABLE, REQUEST_REDIRECT_URL, DYNAMO_BOOK_TABLE
+from mobypick_proj.settings import COGNITO_CLIENT_ID,COGNITO_CLIENT_SECRET,REDIRECT_URL, COGNITO_DOMAIN, BASE_URL, COGNITO_REGION, AWS_ACCESS_KEY, AWS_SECRET_KEY, DYNAMO_USER_TABLE, REQUEST_REDIRECT_URL, DYNAMO_BOOK_TABLE,PERSONALIZE_EVENT_TRACKER
 import requests, base64
 import boto3
+import uuid
+from datetime import datetime
 
 def landing_page(request):
     return render(request, 'landing_page.html')
@@ -221,6 +223,7 @@ def update_book(request, book_type, book_id):
         
         string = user[field]
         string += f",{book_id}"
+        print(string)
         
         response = table.update_item(
             Key={'userID': userID},
@@ -230,10 +233,23 @@ def update_book(request, book_type, book_id):
         )
         print(response)
         if 'Attributes' in response:
-            #  TODO: add an alert to show that the update was successful
+            personalize_events = boto3.client(service_name='personalize-events')
+            # telling Personalize that this event needs to be tracked for the user
+            response = personalize_events.put_events(
+                trackingId = PERSONALIZE_EVENT_TRACKER,
+                userId= userID,
+                sessionId = str(uuid.uuid4()),
+                eventList = [{
+                    'sentAt': datetime.now(),
+                    'eventType': 'read',
+                    'itemId': book_id
+                    }]
+            )
+            print(response)
+
             return JsonResponse({"status" : "updated"})
         else:
-            #  TODO: add an alert to show that the update failed
+            
             return JsonResponse({"status": "failed"})
 
 
