@@ -186,6 +186,27 @@
 
             updateBookInfo(currentIndex);
         }
+
+        function addToDynamo(type) { 
+            console.log(books[currentIndex]);
+            if(type=="r"){
+                console.log("finishedReading");
+            }
+            if(type=="w"){
+                console.log("wantToRead");
+            }
+            fetch(`/update_book/${type}/${books[currentIndex].id}`)
+            .then(response => response.json())
+            .then(data => {
+                var status = data['status'];
+                if(status == "updated"){
+                    alert("Successfully updated!");
+                }else{
+                    alert("update failed");
+                }
+            });
+        }
+        
         var userID = localStorage.getItem('userID');
         var genre_pref ="{{genre_pref}}";
         if("{{genre_pref}}" == undefined){

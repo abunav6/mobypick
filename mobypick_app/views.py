@@ -203,4 +203,37 @@ def fetch_books(request, book_type):
         print(items)
         return JsonResponse({'books': items})
 
+def update_book(request, book_type, book_id):
+    userID = request.COOKIES.get('userID')
+    dynamodb = boto3.resource('dynamodb', aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY, region_name=COGNITO_REGION)
+    table = dynamodb.Table(DYNAMO_USER_TABLE)
+    response = table.scan(
+            FilterExpression='userID = :user_id',
+            ExpressionAttributeValues={':user_id': userID}
+    )
+    print(response)
+    if 'Items' in response and len(response['Items'])>0:
+        user = response['Items'][0]
+        if book_type=="w":
+            field = 'wantToRead'
+        else:
+            field = 'finishedReading'
+        
+        string = user[field]
+        string += f",{book_id}"
+        
+        response = table.update_item(
+            Key={'userID': userID},
+            UpdateExpression=f'SET {field} = :newvalue',
+            ExpressionAttributeValues={':newvalue': string},
+            ReturnValues='UPDATED_NEW'
+        )
+        print(response)
+        if 'Attributes' in response:
+            #  TODO: add an alert to show that the update was successful
+            return JsonResponse({"status" : "updated"})
+        else:
+            #  TODO: add an alert to show that the update failed
+            return JsonResponse({"status": "failed"})
+
 
