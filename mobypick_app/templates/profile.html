@@ -7,7 +7,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Profile</title>
     <style>
-        .cta-button {
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-image: url('https://s3u.tmimgcdn.com/800x0/u28018890/e0fa40dbf6a2d2fe4ac3d2a48e4b268c.jpg'); 
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      font-family: 'Arial', sans-serif; 
+      color: #ffffff;
+    }
+    #content{
+        position: fixed;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, -20%);
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+    }
+    .cta-button {
       display: inline-block;
       padding: 5px 10px;
       font-size: 1em;
@@ -38,18 +58,17 @@
         }  
 
         .scrollable-list {
-            margin-top: 50px;
+            margin-top: 450px;
             height: 300px;
             display: flex;
             overflow-x: auto;
             white-space: nowrap;
             padding: 10px; 
-            
         }
 
         .scrollable-list div {
             flex: 0 0 auto;
-            margin-right: 10px; /* Optional: Add margin between items */
+            margin-right: 10px; 
         }
 
 
@@ -152,50 +171,48 @@
 
 <button id="logout-button" onclick="logout()">Logout</button>
 
+<div id="content">
+    <div style="text-align: center;">
+        <h1>Your Profile</h1>
+    </div>
+    <div style="text-align: center; margin-top: 20px;">
+        <form method="post" action="{% url 'update_profile' %}">
+            {% csrf_token %}
+            <div style="display: flex; align-items: center; justify-content: center; width: 400px; margin: 0 auto;">
+                <label for="userId" style="margin-right: 20px;">User ID:</label>
+                <input type="text" id="userId" disabled style="margin-left: auto;">
+            </div>
 
-<div style="text-align: center;">
-    <h1>Your Profile</h1>
-</div>
-<div style="text-align: center; margin-top: 20px;">
-<form method="post" action="{% url 'update_profile' %}">
-    {% csrf_token %}
-    <div>
-        <label for="userId">User ID:</label>
-        <input type="text" id="userId" disabled>
+            <div style="display: flex; align-items: center; justify-content: center; width: 600px; margin: 0 auto;">
+                <label for="languagePreference" style="margin-right: 55px;">Language Preference:</label>
+                <select id="languagePreference" name="language_preference" style="width: 180px;">
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                </select>
+            </div>
+        
+
+        <div style="display: flex; align-items: center; justify-content: center; width: 600px; margin: 0 auto;">
+            <label for="genrePreference" style="margin-right: 80px;">Genre Preference:</label>
+            <select id="genrePreference" name="genre_preference" style="max-width: 180px;"></select>
+        </div>
+        
+        <button type="submit" id="updateButton" disabled class="cta-button" style="margin-top: 30px;">Update</button></form>
+    </div>
+    <div style="text-align: center; margin-top: 20px;">
+            <button class="cta-button" onclick="showBooks('w')">Check Want-To-Read Shelf</button>
+
+            <button class="cta-button" onclick="showBooks('r')">Check Have-Read Shelf</button>
     </div>
 
-    <div>
-        <label for="languagePreference">Language Preference:</label>
-        <select id="languagePreference" name="language_preference">
-            <option value="en">English</option>
-            <option value="es">Spanish</option>
-            <option value="fr">French</option>
-        </select>
+    <div style="text-align: center; margin-top: 20px;">
+        <button class="cta-button" onclick="getRecommendations()">Get Recommendations!</button>
     </div>
 
-    <div>
-        <label for="genrePreference">Genre Preference:</label>
-        <select id="genrePreference" name="genre_preference"></select>
-    </div>
-
-    <button type="submit" id="updateButton" disabled class="cta-button">Update</button></form>
 </div>
-<div style="text-align: center; margin-top: 20px;">
-        <button class="cta-button" onclick="showBooks('w')">Check Want-To-Read Shelf</button>
-
-        <button class="cta-button" onclick="showBooks('r')">Check Have-Read Shelf</button>
-</div>
-
-<div style="text-align: center; margin-top: 20px;">
-    <button class="cta-button" onclick="getRecommendations()">Get Recommendations!</button>
-</div>
-
-
-<div id="book-list" class="scrollable-list">
-</div>
+<div id="book-list" class="scrollable-list"></div>
 <button class="cta-button" id="close-btn" onclick="hide()">Close</button>
-
-
 </body>
 {% endblock%}
 

@@ -8,8 +8,16 @@
     <title>Book Recommendation</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-        }
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-image: url('https://s3u.tmimgcdn.com/800x0/u28018890/e0fa40dbf6a2d2fe4ac3d2a48e4b268c.jpg'); 
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      font-family: 'Arial', sans-serif; 
+      color: #ffffff;
+    }
 
         #centered-div {
             text-align: center;
@@ -35,10 +43,13 @@
         }
 
         #loading-spinner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             display: block;
             text-align: center;
             margin-top: 20px;
-
         }
 
         .loading-text {
@@ -65,7 +76,7 @@
         #manage-prof-button {
             position: fixed;
             top: 10px;
-            right: 50px;
+            right: 130px;
             background-color: #3498db; /* Green background color */
             color: white; /* White text color */
             border: none; /* No borders */
@@ -149,10 +160,10 @@
                 p1: 'Access-Control-Allow-Origin',
                 'userID':id,
             }
-            if(lang != null){
+            if(lang != ""){
                 params['languageCode'] = lang;
             }
-            if(genre != null){
+            if(genre != ""){
                 params['includeGenres'] = genre;
             }
             console.log(params);
@@ -175,6 +186,10 @@
             document.getElementById('poster').src = books[currentIndex].poster_url;
             document.getElementById('book-title').innerText = books[currentIndex].title;
             document.getElementById('book-author').innerText = books[currentIndex].author;
+        }
+
+        function managePrefs(){
+            window.location.href = '{% url "profile" %}'
         }
 
         function changeBook(direction) {

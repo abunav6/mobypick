@@ -4,10 +4,56 @@
 {% block content %}
 </br>
 
-<ul class="nav nav-tabs" id="genreTabs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    Book Picker!
+  </title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-image: url('https://s3u.tmimgcdn.com/800x0/u28018890/e0fa40dbf6a2d2fe4ac3d2a48e4b268c.jpg'); 
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      font-family: 'Arial', sans-serif; 
+      color: #ffffff;
+    }
+    .cta-button {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 1em;
+      text-decoration: none;
+      background-color: #3498db; 
+      color: #ffffff; 
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    #button-container {
+    display: flex;
+    justify-content: center;
+  }
+  #genreTabs a.nav-link.active {
+        color: blue !important;
+    }
+
+    .tab-content {
+        padding: 20px;
+    }
+  </style>
+</head>
+
+<div style="text-align: center;">
+  <h3>Select books that you like the most!</h3>
+</div>
+
+<ul class="nav nav-tabs" id="genreTabs" style="padding-left:20px;padding-right:20px;padding-bottom:2px;">
     {% for genre, books in items.items %}
     <li class="nav-item">
-    <a class="nav-link {% if forloop.first %}active{% endif %}" id="tab-{{ genre }}" data-toggle="tab" href="#tab-{{genre}}-content">{{genre}}</a>
+    <a style="color: white;" class="nav-link {% if forloop.first %}active{% endif %}" id="tab-{{ genre }}" data-toggle="tab" href="#tab-{{genre}}-content">{{genre}}</a>
   </li>
   {% endfor %}
 </ul>
@@ -30,8 +76,10 @@
   
 </div>
 
-<button onclick="submit()" class="cta-button">Submit</button>
-<button onclick="skip()" class="cta-button">Skip</button>
+<div id="button-container" style="display: flex; justify-content: center; gap: 30px;">
+  <button onclick="submit()" class="cta-button">Submit</button>
+  <button onclick="skip()" class="cta-button">Skip</button>
+</div>
 
 
 <!-- Add this script at the end of your HTML template to enable Bootstrap tabs -->
