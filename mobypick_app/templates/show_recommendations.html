@@ -100,7 +100,7 @@
         <div id="buttons-container">
             <button class="icon-button" id="prev-button" onclick="changeBook(-1)">Previous</button>
             <button class="icon-button" onclick="addToDynamo('r')">Check</button>
-            <button class="icon-button" onclick="logAction('didn\'t like recommendation')">Thumbs Down</button>
+            <button class="icon-button" onclick="dislike()">Thumbs Down</button>
             <button class="icon-button" onclick="addToDynamo('w')">Plus</button>
             <button class="icon-button" id="next-button" onclick="changeBook(1)">Next</button>
         </div>
@@ -162,8 +162,13 @@
         let currentIndex = 0;
         var books=[];
 
-        function logAction(action) {
-            console.log(action);
+        function dislike() {
+            var book = books[currentIndex];
+            fetch(`/dislike_reco/${book.id}`)
+            .then(response => response.json())
+            .then(data => {
+                alert(data["status"]);
+            });
         }
         
         function updateBookInfo(index) {

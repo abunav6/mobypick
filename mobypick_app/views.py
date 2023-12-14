@@ -253,3 +253,20 @@ def update_book(request, book_type, book_id):
             return JsonResponse({"status": "failed"})
 
 
+def dislike_reco(request, book_id):
+    userID = request.COOKIES.get('userID')
+    personalize_events = boto3.client(service_name='personalize-events')
+            # telling Personalize that this event needs to be tracked for the user
+    response = personalize_events.put_events(
+        trackingId = PERSONALIZE_EVENT_TRACKER,
+        userId= userID,
+        sessionId = str(uuid.uuid4()),
+        eventList = [{
+            'sentAt': datetime.now(),
+            'eventType': 'read',
+            'itemId': book_id
+            }]
+    )
+    
+    print(response)
+    return JsonResponse({"status" : "Got it! We will not recommend books like this anymore!"})
