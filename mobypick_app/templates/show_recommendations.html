@@ -1,6 +1,5 @@
 
 {% extends "base/base.html" %}
-<!-- TODO: back to profile page button -->
 {% block content %}
 <html>
 <head>
@@ -126,6 +125,7 @@
                 document.getElementById('loading-spinner').style.display = 'none';
                 document.getElementById('centered-div').style.display = 'block';
                 document.getElementById('logout-button').style.display = 'block';
+                document.getElementById('manage-prof-button').style.display = 'block';
             }
 
             function logout(){
