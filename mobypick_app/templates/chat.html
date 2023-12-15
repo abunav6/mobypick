@@ -41,9 +41,36 @@
 
     <script src="{% static 'js/aws-sdk.min.js' %}"></script>
 
+    <style>
+        #manage-prof-button {
+            position: fixed;
+            top: 10px;
+            right: 130px;
+            background-color: #3498db; /* Green background color */
+            color: white; /* White text color */
+            border: none; /* No borders */
+            padding: 10px 20px; /* Padding */
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }  
+
+        
+    </style>
+
   </head>
 
   <body>
+    <script>
+        function managePrefs(){
+            window.location.href = '{% url "profile" %}'
+        }
+    </script>
+
+
 
     <div class="site-wrapper white">
 
