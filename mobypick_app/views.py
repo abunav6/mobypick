@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from mobypick_proj.settings import COGNITO_CLIENT_ID,COGNITO_CLIENT_SECRET,REDIRECT_URL, COGNITO_DOMAIN, BASE_URL, COGNITO_REGION, AWS_ACCESS_KEY, AWS_SECRET_KEY, DYNAMO_USER_TABLE, REQUEST_REDIRECT_URL, DYNAMO_BOOK_TABLE,PERSONALIZE_EVENT_TRACKER
+from mobypick_proj.settings import COGNITO_CLIENT_ID,COGNITO_CLIENT_SECRET,REDIRECT_URL, COGNITO_DOMAIN, BASE_URL, COGNITO_REGION, AWS_ACCESS_KEY, AWS_SECRET_KEY, DYNAMO_USER_TABLE, REQUEST_REDIRECT_URL,PERSONALIZE_EVENT_TRACKER, RDS_HOST, RDS_USER, RDS_PWD, RDS_DB
 import requests, base64
 import boto3
 import uuid
 from datetime import datetime
+import pymysql
 
 def landing_page(request):
     return render(request, 'landing_page.html')
@@ -120,10 +121,8 @@ def update_profile(request):
             ReturnValues='UPDATED_NEW'
     )
     if 'Attributes' in response:
-        #  TODO: add an alert to show that the update was successful
         print("updated")
     else:
-        #  TODO: add an alert to show that the update failed
         print("failed")
     return render(request, 'profile.html')
 
@@ -156,10 +155,10 @@ def put_books(request):
             ReturnValues='UPDATED_NEW'
     )
     if 'Attributes' in response:
-        #  TODO: add an alert to show that the update was successful
+        
         print("updated")
     else:
-        #  TODO: add an alert to show that the update failed
+        
         print("failed")
     return render(request, "profile.html")
 
@@ -178,26 +177,33 @@ def fetch_books(request, book_type):
     if 'Items' in response and len(response['Items'])>0:
         user = response['Items'][0]
         if book_type=="w":
-            books = [k.strip() for k in user['wantToRead'].split(",")]
+            books = user['wantToRead']
 
         else:
-            books = [k.strip() for k in user['finishedReading'].split(",")]
+            books = user['finishedReading']
         
         items = []
         if books:
-            for book in books:
-                table = dynamodb.Table(DYNAMO_BOOK_TABLE)
-                response = table.scan(
-                    FilterExpression='ITEM_ID = :book_id',
-                    ExpressionAttributeValues={':book_id': book}
-                ) 
-                if 'Items' in response and len(response['Items'])>0:
-                    bookData = response['Items'][0]
+            try:
+                conn = pymysql.connect(host=RDS_HOST, user=RDS_USER, passwd=RDS_PWD, db=RDS_DB, connect_timeout=5)
+            except pymysql.MySQLError as e:
+                return JsonResponse({'error': e})
+        
+            if books.startswith(","):
+                books = books[1:]
+
+            with conn.cursor(pymysql.cursors.DictCursor) as cur:
+                cur.execute("SELECT * FROM Book WHERE ITEM_ID IN ({});".format(books))
+                data = list(cur)
+                item_count=0
+                for row in data:
+                    item_count += 1
                     items.append({
-                        'title': bookData['original_title'],
-                        'author':bookData['name'],
-                        'image_url':bookData['image_url'],
-                        'url':bookData['url']
+                        'id': row.get("ITEM_ID"),
+                        'title': row.get("title"),
+                        'author': row.get("name"),
+                        'url': row.get("url"),
+                        'image_url' : row.get("image_url")
                     })
 
         print(items)

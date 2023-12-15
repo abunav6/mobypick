@@ -141,6 +141,11 @@ REQUEST_REDIRECT_URL="https://mobypick.us-east-1.elasticbeanstalk.com/loading"
 AWS_ACCESS_KEY = 'AKIAQCUQKUEC7JI53GUM'
 AWS_SECRET_KEY = '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'
 DYNAMO_USER_TABLE = 'UserInfo'
-DYNAMO_BOOK_TABLE = 'CompleteBookData'
 
 PERSONALIZE_EVENT_TRACKER = '53074283-8c08-43a9-a11e-56c9cc89b134'
+
+
+RDS_USER = "admin"
+RDS_PWD = "Bookreco123"
+RDS_HOST = "mobypickbookreco.ctoo3wejf5nw.us-east-1.rds.amazonaws.com"
+RDS_DB = "mobypickbookrec"
