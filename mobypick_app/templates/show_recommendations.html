@@ -239,7 +239,7 @@
         console.log(language_preference,userID,genre_pref);
         
         
-        getRecommendations(language_preference,userID.trim(),genre_pref.replaceAll("_", ", ")).then((response) =>{
+        getRecommendations(language_preference,userID.trim(),genre_pref.replaceAll("_", "%2C%20")).then((response) =>{
             console.log(response);
             hideLoadingSpinner();
             if(response.status == 200){
