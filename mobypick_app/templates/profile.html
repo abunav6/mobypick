@@ -165,7 +165,9 @@
     function hide(){
         document.getElementById('book-list').innerHTML='';
         document.getElementById('close-btn').style.display = 'none';
-
+    }
+    function speakToAhab(){
+        window.location.href = '{% url "chat" %}'
     }
 </script>
 
@@ -207,8 +209,11 @@
     </div>
 
     <div style="text-align: center; margin-top: 20px;">
-        <button class="cta-button" onclick="getRecommendations()">Get Recommendations!</button>
+        <button class="cta-button" onclick="getRecommendations()">Get Personalized Recommendations!</button>
+        <button class="cta-button" onclick="speakToAhab()">or, Speak to Ahab!</button>
     </div>
+
+    
 
 </div>
 <div id="book-list" class="scrollable-list"></div>
