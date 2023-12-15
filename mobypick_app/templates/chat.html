@@ -1,0 +1,96 @@
+<!-- Template: http://getbootstrap.com/examples/cover/ -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="The Foodie Friend - Recommends restaurants based on your preferences!">
+    <meta name="author" content="Andrei Papancea">
+
+    <title>Insert funny name</title>
+
+    <!-- Bootstrap core CSS -->
+    {% load static %}
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="{% static 'css/ie10-viewport-bug-workaround.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href=" {% static 'css/cover.css' %}" rel="stylesheet">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'css/chat.css' %}" rel="stylesheet">
+
+    <!-- api gateway generated sdk -->
+    <script src="{% static 'js/chat-sdk/lib/axios/dist/axios.standalone.js' %}"></script>
+    <script src="{% static 'js/chat-sdk/lib/CryptoJS/rollups/hmac-sha256.js' %}"></script>
+    <script src="{% static 'js/chat-sdk/lib/CryptoJS/rollups/sha256.js' %}"></script>
+    <script src="{% static 'js/chat-sdk/lib/CryptoJS/components/hmac.js' %}"></script>
+    <script src="{% static 'js/chat-sdk/lib/CryptoJS/components/enc-base64.js' %}"></script>
+    <script src="{% static 'js/chat-sdk/lib/url-template/url-template.js' %}"></script>
+    <script src="{% static 'js/chat-sdk/lib/apiGatewayCore/sigV4Client.js' %}"></script>
+    <script src="{% static 'js/chat-sdk/lib/apiGatewayCore/apiGatewayClient.js' %}"></script>
+    <script src="{% static 'js/chat-sdk/lib/apiGatewayCore/simpleHttpClient.js' %}"></script>
+    <script src="{% static 'js/chat-sdk/lib/apiGatewayCore/utils.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+    <script src="{% static 'js/chat-sdk/apigClient.js' %}"></script>
+
+    <script src="{% static 'js/aws-sdk.min.js' %}"></script>
+
+  </head>
+
+  <body>
+
+    <div class="site-wrapper white">
+
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand">Book Bot!</h3>
+            </div>
+          </div>
+
+          <div class="inner">
+            <div class="chat">
+              <div class="messages">
+                <div class="messages-content"></div>
+              </div>
+              <div class="message-box">
+                <textarea type="text" class="message-input" placeholder="Type message..."></textarea>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <script>
+
+      var chat_sdk = apigClientFactory.newClient({});
+
+    </script>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- <script>window.jQuery || document.write('<script src="{% static 'js/vendor/jquery.min.js"><\/script>')</script> -->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
+    <!-- custom scroll bar -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.3/jquery.mCustomScrollbar.concat.min.js'></script>
+    <!-- chat js -->
+    <script src="{% static 'js/chat.js' %}"></script>
+  </body>
+</html>

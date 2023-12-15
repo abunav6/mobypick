@@ -268,3 +268,8 @@ def dislike_reco(request, book_id):
     
     print(response)
     return JsonResponse({"status" : "Got it! We will not recommend books like this anymore!"})
+
+
+
+def chat(request):
+    return render(request, "chat.html")
