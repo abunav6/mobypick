@@ -59,7 +59,7 @@
 
         .scrollable-list {
             margin-top: 450px;
-            height: 300px;
+            height: 400px;
             display: flex;
             overflow-x: auto;
             white-space: nowrap;
@@ -70,6 +70,50 @@
             flex: 0 0 auto;
             margin-right: 10px; 
         }
+
+        #buttons-container {
+            margin-top: 10px;
+        }
+
+        #book-div {
+    width: 420px; /* Set your desired fixed width */
+    height: 300px; /* Set your desired fixed height */
+    border: 1px solid #ddd; /* Light grey border */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    overflow: hidden; /* Hide overflowing content */
+    text-align: center;
+    margin-top:50px;
+}
+
+#book-div img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px; /* Add some spacing between image and text */
+}
+
+#book-div p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+        #buttons-container button {
+            margin-top: 10px;
+        }
+
+        /* Optional: Adjust the styling of the buttons */
+        .icon-button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+
 
 
     </style>
@@ -127,6 +171,7 @@
         window.location.href = "{% url 'cognito_logout' %}"
     }
 
+
     function showBooks(type){
         // Make an AJAX request to fetch books
         document.getElementById('close-btn').style.display = 'block';
@@ -143,11 +188,13 @@
                 data.books.forEach(book => {
                     const bookDiv = document.createElement('div');
                     bookDiv.innerHTML = `
+                    <div id="book-div">
                         <div ondblclick="window.open('${book.url}', '_blank')">
                             <img src="${book.image_url}" alt="Image" class="img-fluid">
                             <p>${book.title}</p>
                             <p>${book.author}</p>
                         </div>
+                    </div>
                     `;
                     bookList.appendChild(bookDiv);
                 });
@@ -214,9 +261,12 @@
     
 
 </div>
-<div id="book-list" class="scrollable-list"></div>
-<button class="cta-button" id="close-btn" onclick="hide()">Close</button>
+<div style="text-align: center;">
+    <div id="book-list" class="scrollable-list"></div>
+    <button class="cta-button" id="close-btn" onclick="hide()" style="margin-top:20px;">Close</button>
+</div>
 </body>
+
 {% endblock%}
 
 
