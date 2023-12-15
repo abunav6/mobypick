@@ -279,3 +279,52 @@ def dislike_reco(request, book_id):
 
 def chat(request):
     return render(request, "chat.html")
+
+
+def move_to_read(request, book_id):
+    userID = request.COOKIES.get('userID')
+    dynamodb = boto3.resource('dynamodb', aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY, region_name=COGNITO_REGION)
+    table = dynamodb.Table(DYNAMO_USER_TABLE)
+    response = table.scan(
+            FilterExpression='userID = :user_id',
+            ExpressionAttributeValues={':user_id': userID}
+    )
+    print(response)
+    if 'Items' in response and len(response['Items'])>0:
+        user = response['Items'][0]
+        wtr = user['wantToRead']
+        fr = user['finishedReading']
+        print(wtr, fr)
+        wtr = wtr.replace(f",{book_id}","")
+        print(wtr)
+        fr+=f",{book_id}"
+        print(fr)
+        response = table.update_item(
+            Key={'userID': userID},
+            UpdateExpression=f'SET wantToRead = :wtr, finishedReading = :fr',
+            ExpressionAttributeValues={':wtr': wtr, ':fr' : fr},
+            ReturnValues='UPDATED_NEW'
+        )
+        print(response)
+        if 'Attributes' in response:
+            personalize_events = boto3.client(service_name='personalize-events')
+            response = personalize_events.put_events(
+                trackingId = PERSONALIZE_EVENT_TRACKER,
+                userId= userID,
+                sessionId = str(uuid.uuid4()),
+                eventList = [{
+                    'sentAt': datetime.now(),
+                    'eventType': 'read',
+                    'itemId': book_id
+                    }]
+            )
+            print(response)
+
+            return JsonResponse({"status" : "updated"})
+        else:
+            
+            return JsonResponse({"status": "failed"}) 
+
+        
+    
+    return JsonResponse({"status": "ongoing"})

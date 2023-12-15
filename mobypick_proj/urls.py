@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from mobypick_app.views import landing_page, select_books, cognito_login, loading, show_recommendations, cognito_logout, cognito_signup, profile, update_profile,getLatestRecommendations, put_books, fetch_books, update_book, dislike_reco, chat
+from mobypick_app.views import landing_page, select_books, cognito_login, loading, show_recommendations, cognito_logout, cognito_signup, profile, update_profile,getLatestRecommendations, put_books, fetch_books, update_book, dislike_reco, chat, move_to_read
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,4 +35,5 @@ urlpatterns = [
     path('update_book/<str:book_type>/<str:book_id>', update_book, name='update_book'),
     path('dislike_reco/<str:book_id>/', dislike_reco, name='dislike_reco'),
     path('chat/', chat, name='chat'),
+    path('move_to_read/<str:book_id>/', move_to_read, name='move_to_read'),
 ]

@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Profile</title>
     <style>
+        html { overflow-y: scroll; overflow-x:scroll; }
     body {
       margin: 0;
       padding: 0;
@@ -17,6 +18,7 @@
       background-attachment: fixed;
       font-family: 'Arial', sans-serif; 
       color: #ffffff;
+      position: absolute !important;
     }
     #content{
         position: fixed;
@@ -171,6 +173,22 @@
         window.location.href = "{% url 'cognito_logout' %}"
     }
 
+    function markCompleted(type, book_id) {
+        console.log("Type:", type);
+        console.log("Book ID:", book_id);
+
+        fetch(`/move_to_read/${book_id}/`)
+            .then(response => response.json())
+            .then(data => {
+                if(data.status == "updated"){
+                    alert("Moved to your Read list!");
+                }else{
+                    alert("Something went wrong!");
+                }
+                document.location.reload();
+        });
+    }
+
 
     function showBooks(type){
         // Make an AJAX request to fetch books
@@ -194,6 +212,7 @@
                             <p>${book.title}</p>
                             <p>${book.author}</p>
                         </div>
+                        <button onclick="markCompleted('${type}', '${book.id}')">Completed!</button>
                     </div>
                     `;
                     bookList.appendChild(bookDiv);
