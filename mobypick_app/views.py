@@ -62,12 +62,10 @@ def loading(request):
     table = dynamodb.Table(DYNAMO_USER_TABLE)
 
     if isNewUser=="true":
-        print("adding new user")
-        want_to_read = []
-        finished_reading = []
+        want_to_read = ''
+        finished_reading = ''
         language_pref = ''
         genre_pref = ''
-
         item = {
             'userID': userID,
             'email': email,
@@ -150,7 +148,7 @@ def put_books(request):
     wantoread = request.COOKIES.get('selectedBooks')
     dynamodb = boto3.resource('dynamodb', aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY, region_name=COGNITO_REGION)
     table = dynamodb.Table(DYNAMO_USER_TABLE)
-
+    print(wantoread)
     response = table.update_item(
         Key={'userID': userID},
             UpdateExpression='SET wantToRead = :wantoread',
