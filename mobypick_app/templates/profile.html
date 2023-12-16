@@ -212,7 +212,9 @@
                             <p>${book.title}</p>
                             <p>${book.author}</p>
                         </div>
+                        {% if type == 'w' %}
                         <button onclick="markCompleted('${type}', '${book.id}')">Completed!</button>
+                        {% endif %}
                     </div>
                     `;
                     bookList.appendChild(bookDiv);
