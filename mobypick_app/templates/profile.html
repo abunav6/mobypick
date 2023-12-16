@@ -201,22 +201,32 @@
             .then(response => response.json())
             .then(data => {
                 // Render the books in the template
-                console.log(data);
+                console.log(data, type);
 
                 data.books.forEach(book => {
                     const bookDiv = document.createElement('div');
-                    bookDiv.innerHTML = `
-                    <div id="book-div">
-                        <div ondblclick="window.open('${book.url}', '_blank')">
-                            <img src="${book.image_url}" alt="Image" class="img-fluid">
-                            <p>${book.title}</p>
-                            <p>${book.author}</p>
+                    if(type=="w"){
+                        bookDiv.innerHTML = `
+                        <div id="book-div">
+                            <div ondblclick="window.open('${book.url}', '_blank')">
+                                <img src="${book.image_url}" alt="Image" class="img-fluid">
+                                <p>${book.title}</p>
+                                <p>${book.author}</p>
+                            </div>
+                            <button onclick="markCompleted('${type}', '${book.id}')">Completed!</button>
                         </div>
-                        {% if type == 'w' %}
-                        <button onclick="markCompleted('${type}', '${book.id}')">Completed!</button>
-                        {% endif %}
-                    </div>
-                    `;
+                        `;
+                    }else{
+                        bookDiv.innerHTML = `
+                        <div id="book-div">
+                            <div ondblclick="window.open('${book.url}', '_blank')">
+                                <img src="${book.image_url}" alt="Image" class="img-fluid">
+                                <p>${book.title}</p>
+                                <p>${book.author}</p>
+                            </div>
+                        </div>
+                        `;
+                    }
                     bookList.appendChild(bookDiv);
                 });
             })
