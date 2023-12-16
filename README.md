@@ -25,6 +25,7 @@ MobyPick is hosted on a load-balanced Elastic Beanstalk environment, which uses 
 - S3 as data store for the frontend
 - EventBridge to trigger weekly recommendations
 - SES to send weekly recommendations to the users
+- ElastiCache to store frequently accessed books to reduce access times
 
 
 ## Usage
