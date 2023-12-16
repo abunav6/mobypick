@@ -10,12 +10,7 @@ Team Members:
 
 ## About MobyPick
 
-We have designed and built Moby Pick, a cloud-based web
-application that provides users with personalized book rec-
-ommendations. The main goal of our application is to en-
-courage users to broaden their horizons in their book-reading
-habits and discover new books they may have otherwise over-
-looked.
+We have designed and built Moby Pick, a cloud-based web application that provides users with personalized book recommendations. The main goal of our application is to encourage users to broaden their horizons in their book-reading habits and discover new books they may have otherwise overlooked.
 
 ### Architecture
 
