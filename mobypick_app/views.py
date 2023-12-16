@@ -237,7 +237,7 @@ def update_book(request, book_type, book_id):
         )
         print(response)
         if 'Attributes' in response:
-            personalize_events = boto3.client(service_name='personalize-events')
+            personalize_events = boto3.client(service_name='personalize-events', region_name=COGNITO_REGION)
             # telling Personalize that this event needs to be tracked for the user
             response = personalize_events.put_events(
                 trackingId = PERSONALIZE_EVENT_TRACKER,
@@ -259,7 +259,7 @@ def update_book(request, book_type, book_id):
 
 def dislike_reco(request, book_id):
     userID = request.COOKIES.get('userID')
-    personalize_events = boto3.client(service_name='personalize-events')
+    personalize_events = boto3.client(service_name='personalize-events', region_name=COGNITO_REGION)
             # telling Personalize that this event needs to be tracked for the user
     response = personalize_events.put_events(
         trackingId = PERSONALIZE_EVENT_TRACKER,
@@ -307,7 +307,7 @@ def move_to_read(request, book_id):
         )
         print(response)
         if 'Attributes' in response:
-            personalize_events = boto3.client(service_name='personalize-events')
+            personalize_events = boto3.client(service_name='personalize-events',  region_name=COGNITO_REGION)
             response = personalize_events.put_events(
                 trackingId = PERSONALIZE_EVENT_TRACKER,
                 userId= userID,
