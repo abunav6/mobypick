@@ -7,6 +7,8 @@ Team Members:
 - Shirley Berry
 - Shruti Garg (sg7395)
 
+## Demo Video:
+https://youtu.be/TvteREXHAqk
 
 ## About MobyPick
 
