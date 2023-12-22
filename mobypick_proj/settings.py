@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import boto3
+from botocore.exceptions import ClientError
+import json
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -125,10 +128,6 @@ STATIC_ROOT = 'static'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-COGNITO_CLIENT_ID='2e7kvbaanloridi3m4sn7qjmh1'
-COGNITO_CLIENT_SECRET='14e1escajfp87cpfb0eu9dm3t1i0bsl7gu7jnucl8mf2m4gmfvsm'
-COGNITO_REGION='us-east-1'
-COGNITO_DOMAIN='https://mobypick.auth.us-east-1.amazoncognito.com'
 
 BASE_URL = "https%3A%2F%2Fmobypick.us-east-1.elasticbeanstalk.com"
 # BASE_URL = "https%3A%2F%2Flocalhost%3A8000"
@@ -138,14 +137,51 @@ REQUEST_REDIRECT_URL="https://mobypick.us-east-1.elasticbeanstalk.com/loading"
 # REQUEST_REDIRECT_URL="https://localhost:8000/loading"
 
 
-AWS_ACCESS_KEY = 'AKIAQCUQKUECQV23R3KL'
-AWS_SECRET_KEY = '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'
+
+secret_name = "serviceKeys"
+region_name = "us-east-1"
+
+# Create a Secrets Manager client
+session = boto3.session.Session()
+client = session.client(
+service_name='secretsmanager',
+region_name=region_name
+)
+
+try:
+    get_secret_value_response = client.get_secret_value(SecretId=secret_name)
+except ClientError as e:
+    # For a list of exceptions thrown, see
+    # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
+    raise e
+
+secrets = json.loads(str(get_secret_value_response['SecretString']))
+
+AWS_ACCESS_KEY = secrets['AWS_ACCESS_KEY']
+AWS_SECRET_KEY = secrets['AWS_SECRET_KEY']
 DYNAMO_USER_TABLE = 'UserInfo'
 
 PERSONALIZE_EVENT_TRACKER = '53074283-8c08-43a9-a11e-56c9cc89b134'
 
 
 RDS_USER = "admin"
-RDS_PWD = "Bookreco123"
+RDS_PWD = secrets['RDS_PWD']
 RDS_HOST = "mobypickbookreco.ctoo3wejf5nw.us-east-1.rds.amazonaws.com"
 RDS_DB = "mobypickbookrec"
+
+secret_name="cognitoSecret"
+
+try:
+    get_secret_value_response = client.get_secret_value(SecretId=secret_name)
+except ClientError as e:
+    # For a list of exceptions thrown, see
+    # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
+    raise e
+
+
+secrets = json.loads(str(get_secret_value_response['SecretString']))
+
+COGNITO_CLIENT_ID='2e7kvbaanloridi3m4sn7qjmh1'
+COGNITO_CLIENT_SECRET=secrets['COGNITO_CLIENT_SECRET']
+COGNITO_REGION='us-east-1'
+COGNITO_DOMAIN='https://mobypick.auth.us-east-1.amazoncognito.com'

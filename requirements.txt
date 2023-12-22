@@ -5,3 +5,4 @@ sqlparse==0.4.4
 boto3==1.33.4
 requests==2.31.0
 pymysql==1.1.0
+botocore==1.33.13
